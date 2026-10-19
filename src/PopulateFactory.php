@@ -171,10 +171,13 @@ class PopulateFactory extends FixtureFactory
 
             unset($latest['ID']);
 
-            // Creating the object above writes a second record.
-            // Silverstripe renames that record to keep its values unique.
-            // A page asking for about-us is saved as about-us-2.
-            // The map read back from it carries the renamed value.
+            // Creating the object above writes a second, throwaway record.
+            // The matched record already holds about-us, so Silverstripe
+            // renames the throwaway to about-us-2 to keep segments unique.
+            // The map read back from it carries that renamed value.
+            // Writing the map onto the matched record would collide with the
+            // throwaway, which still holds about-us-2, and bump it to
+            // about-us-3. The page the fixture named then serves a redirect.
             // Put the values the fixture declared over the map again.
             // ID is skipped, so the matched record keeps its own.
             // Arrays and values starting with => are skipped too.
