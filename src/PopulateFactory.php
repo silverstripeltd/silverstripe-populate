@@ -176,9 +176,14 @@ class PopulateFactory extends FixtureFactory
             // A page asking for about-us is saved as about-us-2.
             // The map read back from it carries the renamed value.
             // Put the values the fixture declared over the map again.
-            // Arrays and values starting with => are skipped.
+            // ID is skipped, so the matched record keeps its own.
+            // Arrays and values starting with => are skipped too.
             // The blueprint has already resolved those into IDs.
             foreach ($fixtureData ?? [] as $field => $value) {
+                if ($field === 'ID') {
+                    continue;
+                }
+
                 if (is_array($value) || (is_string($value) && str_starts_with($value, '=>'))) {
                     continue;
                 }
