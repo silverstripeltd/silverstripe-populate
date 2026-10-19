@@ -171,6 +171,21 @@ class PopulateFactory extends FixtureFactory
 
             unset($latest['ID']);
 
+            // Creating the object above writes a second record.
+            // Silverstripe renames that record to keep its values unique.
+            // A page asking for about-us is saved as about-us-2.
+            // The map read back from it carries the renamed value.
+            // Put the values the fixture declared over the map again.
+            // Arrays and values starting with => are skipped.
+            // The blueprint has already resolved those into IDs.
+            foreach ($fixtureData ?? [] as $field => $value) {
+                if (is_array($value) || (is_string($value) && str_starts_with($value, '=>'))) {
+                    continue;
+                }
+
+                $latest[$field] = $value;
+            }
+
             $existing->update($latest);
             $existing->write();
 
